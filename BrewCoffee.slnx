@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Dockerfile" />
+    <File Path=".dockerignore" />
+    <File Path=".gitignore" />
+    <File Path=".editorconfig" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src\BrewCoffee.Api\BrewCoffee.Api.csproj" />
+    <Project Path="src\BrewCoffee.Authorization\BrewCoffee.Authorization.csproj" />
+    <Project Path="src\BrewCoffee.Shared\BrewCoffee.Shared.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests\BrewCoffee.AcceptanceTests\BrewCoffee.AcceptanceTests.csproj" />
+    <Project Path="tests\BrewCoffee.UnitTests\BrewCoffee.UnitTests.csproj" />
+  </Folder>
+</Solution>
