@@ -37,4 +37,10 @@ public sealed class Error
 
     public static Error Forbidden(string message)
         => new(ErrorType.Forbidden, message);
+
+    public static Error InternalServer(string message)
+        => new(ErrorType.InternalServerError, message);
+
+    public static implicit operator string(Error error)
+        => error.Message;
 }
