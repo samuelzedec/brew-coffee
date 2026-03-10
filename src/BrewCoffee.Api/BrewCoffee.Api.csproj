@@ -7,7 +7,6 @@
     <InternalsVisibleTo Include="CoffeeAgent.UnitTests"/>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="BCrypt.Net-Next"/>
     <PackageReference Include="FluentValidation"/>
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions"/>
     <PackageReference Include="Microsoft.Agents.AI"/>
@@ -24,9 +23,13 @@
     <PackageReference Include="Scalar.AspNetCore"/>
     <PackageReference Include="Serilog.AspNetCore"/>
     <PackageReference Include="ZedEndpoints"/>
+    <PackageReference Include="Mediator.SourceGenerator">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BrewCoffee.Shared\BrewCoffee.Shared.csproj" />
+    <ProjectReference Include="..\BrewCoffee.Shared\BrewCoffee.Shared.csproj"/>
   </ItemGroup>
 </Project>

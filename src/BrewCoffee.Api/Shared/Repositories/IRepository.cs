@@ -1,6 +1,6 @@
-using BrewCoffee.Shared.Abstractions;
+using BrewCoffee.Api.Shared.Abstractions;
 
-namespace BrewCoffee.Shared.Repositories;
+namespace BrewCoffee.Api.Shared.Repositories;
 
 /// <summary>
 /// Define um contrato genérico para operações de repositório, permitindo a interação

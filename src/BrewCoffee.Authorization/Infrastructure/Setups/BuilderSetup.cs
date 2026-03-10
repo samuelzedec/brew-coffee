@@ -47,9 +47,9 @@ internal static class BuilderSetup
             var isDevelopment = builder.Environment
                 .IsDevelopment();
 
-            builder.Services.AddDbContext<CoffeeAuthDbContext>(options => options
+            builder.Services.AddDbContext<BrewCoffeeAuthDbContext>(options => options
                 .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), b => b
-                    .MigrationsAssembly(typeof(CoffeeAuthDbContext).Assembly.FullName)
+                    .MigrationsAssembly(typeof(BrewCoffeeAuthDbContext).Assembly.FullName)
                     .MigrationsHistoryTable("__EFMigrationsHistory", "identity"))
                 .UseOpenIddict<Guid>()
                 .EnableServiceProviderCaching()
@@ -96,7 +96,7 @@ internal static class BuilderSetup
         {
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
                     options.Stores.SchemaVersion = IdentitySchemaVersions.Version3)
-                .AddEntityFrameworkStores<CoffeeAuthDbContext>()
+                .AddEntityFrameworkStores<BrewCoffeeAuthDbContext>()
                 .AddDefaultTokenProviders();
         }
 
@@ -105,7 +105,7 @@ internal static class BuilderSetup
             builder.Services.AddOpenIddict()
                 .AddCore(options => options
                     .UseEntityFrameworkCore()
-                    .UseDbContext<CoffeeAuthDbContext>()
+                    .UseDbContext<BrewCoffeeAuthDbContext>()
                     .ReplaceDefaultEntities<Guid>()
                 )
                 .AddServer(options =>

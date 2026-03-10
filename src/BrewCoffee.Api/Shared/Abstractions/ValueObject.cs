@@ -1,4 +1,4 @@
-namespace BrewCoffee.Shared.Abstractions;
+namespace BrewCoffee.Api.Shared.Abstractions;
 
 /// <summary>
 /// Classe abstrata que serve como base para a implementação de objetos de valor.

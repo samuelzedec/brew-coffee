@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace CoffeeAgent.Authorization.Infrastructure.Options;
+namespace BrewCoffee.Api.Infrastructure.Settings;
 
-internal sealed class AgentsOptions
+internal sealed class AgentSettings
 {
     [Required] public required string Name { get; set; }
     [Required] public required string ApiKey { get; set; }

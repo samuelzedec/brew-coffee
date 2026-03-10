@@ -1,10 +1,10 @@
-using BrewCoffee.Shared.Abstractions;
-using BrewCoffee.Shared.Repositories;
+using BrewCoffee.Api.Shared.Abstractions;
+using BrewCoffee.Api.Shared.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace BrewCoffee.Authorization.Infrastructure.Persistence.Repositories;
+namespace BrewCoffee.Api.Infrastructure.Persistence.Repositories;
 
-internal abstract class Repository<T>(CoffeeAuthDbContext context)
+internal abstract class Repository<T>(BrewCoffeeDbContext context)
     : IRepository<T> where T : Entity
 {
     protected readonly DbSet<T> _table = context.Set<T>();

@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace BrewCoffee.Authorization.Infrastructure.Persistence.Migrations
 {
-    [DbContext(typeof(CoffeeAuthDbContext))]
+    [DbContext(typeof(BrewCoffeeAuthDbContext))]
     partial class CoffeeAuthDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

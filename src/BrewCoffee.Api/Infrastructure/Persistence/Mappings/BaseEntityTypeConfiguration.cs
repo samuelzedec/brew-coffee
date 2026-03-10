@@ -1,7 +1,8 @@
+using BrewCoffee.Api.Shared.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace BrewCoffee.Shared.Abstractions.Mappings;
+namespace BrewCoffee.Api.Infrastructure.Persistence.Mappings;
 
 public abstract class BaseEntityTypeConfiguration<T> : IEntityTypeConfiguration<T>
     where T : Entity

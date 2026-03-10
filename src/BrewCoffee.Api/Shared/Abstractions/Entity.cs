@@ -1,4 +1,4 @@
-namespace BrewCoffee.Shared.Abstractions;
+namespace BrewCoffee.Api.Shared.Abstractions;
 
 /// <summary>
 /// Representa uma entidade base abstrata que fornece propriedades e funcionalidades comuns

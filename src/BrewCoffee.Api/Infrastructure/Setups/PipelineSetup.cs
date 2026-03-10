@@ -1,9 +1,9 @@
-using BrewCoffee.Authorization.Infrastructure.Persistence;
+using BrewCoffee.Api.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using ZedEndpoints.Extensions;
 
-namespace BrewCoffee.Authorization.Infrastructure.Setups;
+namespace BrewCoffee.Api.Infrastructure.Setups;
 
 internal static class PipelineSetup
 {
@@ -22,15 +22,13 @@ internal static class PipelineSetup
             app.ConfigureApiDocumentation();
             app.MapEndpointGroups(globalPrefix: "api/v1");
             app.UseExceptionHandler();
-            app.UseAuthentication();
-            app.UseAuthorization();
             await app.ApplyMigrationsAsync();
         }
 
         private async Task ApplyMigrationsAsync()
         {
             using var scope = app.Services.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<BrewCoffeeAuthDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<BrewCoffeeDbContext>();
             await context.Database.MigrateAsync();
         }
 

@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace BrewCoffee.Authorization.Infrastructure.Persistence.Migrations
 {
-    [DbContext(typeof(CoffeeAuthDbContext))]
+    [DbContext(typeof(BrewCoffeeAuthDbContext))]
     [Migration("20260309000041_InitialSchemaDatabase")]
     partial class InitialSchemaDatabase
     {

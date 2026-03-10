@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BrewCoffee.Authorization.Infrastructure.Persistence;
 
-internal sealed class CoffeeAuthDbContext(DbContextOptions<CoffeeAuthDbContext> options)
+internal sealed class BrewCoffeeAuthDbContext(DbContextOptions<BrewCoffeeAuthDbContext> options)
     : IdentityDbContext<
         ApplicationUser,
         ApplicationRole,
@@ -22,6 +22,6 @@ internal sealed class CoffeeAuthDbContext(DbContextOptions<CoffeeAuthDbContext> 
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.HasDefaultSchema("identity");
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(CoffeeAuthDbContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(BrewCoffeeAuthDbContext).Assembly);
     }
 }
