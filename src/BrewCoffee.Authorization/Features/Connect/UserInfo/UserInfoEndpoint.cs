@@ -12,8 +12,13 @@ internal sealed class UserInfoEndpoint : IEndpoint
     public static void Map(IEndpointRouteBuilder app)
         => app.MapGet("/userinfo", HandleAsync)
             .RequireAuthorization()
-            .WithSummary("User Info")
-            .WithDescription("Returns the claims of the authenticated user.")
+            .WithSummary("Informações do usuário")
+            .WithDescription(
+                """
+                Retorna as claims do usuário autenticado via token OpenIddict.
+                Valida o token de acesso pelo esquema do servidor OpenIddict, extrai o subject claim para localizar o usuário na base de dados
+                e retorna um dicionário com as claims: sub (ID), email, email_verified e name (nome de usuário).
+                """)
             .Produces<Dictionary<string, object>>()
             .ProducesProblem(StatusCodes.Status401Unauthorized)
             .ProducesProblem(StatusCodes.Status403Forbidden);

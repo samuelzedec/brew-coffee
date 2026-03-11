@@ -41,6 +41,7 @@ internal static class PipelineSetup
 
             app.MapOpenApi();
             app.MapScalarApiReference();
+            app.MapGet("/", () => Results.Redirect("/scalar/v1")).ExcludeFromDescription();
         }
     }
 }
