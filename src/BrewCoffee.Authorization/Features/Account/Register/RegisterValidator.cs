@@ -9,7 +9,9 @@ internal sealed class RegisterValidator
     {
         RuleFor(x => x.UserName)
             .NotEmpty()
-            .WithMessage("O nome de usuário é obrigatório.");
+            .WithMessage("O nome de usuário é obrigatório.")
+            .Matches("^[a-zA-Z0-9]+$")
+            .WithMessage("O nome de usuário deve conter apenas letras e números, sem espaços ou caracteres especiais.");
 
         RuleFor(x => x.Email)
             .NotEmpty()

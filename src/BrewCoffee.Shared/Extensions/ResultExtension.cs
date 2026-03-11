@@ -17,10 +17,10 @@ public static class ResultExtension
 
     extension<T>(Result<T> result)
     {
-        public IResult ToActionResult(string? routeName = null)
+        public IResult ToActionResult(string? locationUri = null)
         {
-            if (result.IsSuccess && routeName is not null)
-                return Results.CreatedAtRoute(routeName, null, result.Value);
+            if (result.IsSuccess && locationUri is not null)
+                return Results.Created(locationUri, result.Value);
 
             if (result.IsSuccess)
                 return Results.Ok(result.Value);
