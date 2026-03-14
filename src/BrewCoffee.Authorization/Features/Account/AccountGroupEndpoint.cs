@@ -1,3 +1,4 @@
+using BrewCoffee.Authorization.Features.Account.ChangePassword;
 using BrewCoffee.Authorization.Features.Account.Register;
 using ZedEndpoints.Abstractions;
 using ZedEndpoints.Extensions;
@@ -13,6 +14,7 @@ internal sealed class AccountGroupEndpoint : IEndpointGroup
             .WithTags("Account");
 
         group
-            .MapEndpoint<RegisterEndpoint>();
+            .MapEndpoint<RegisterEndpoint>()
+            .MapEndpoint<ChangePasswordEndpoint>();
     }
 }

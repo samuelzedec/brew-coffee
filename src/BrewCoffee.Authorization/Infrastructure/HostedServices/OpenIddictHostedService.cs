@@ -62,8 +62,8 @@ internal sealed class OpenIddictHostedService(
     {
         var manager = services.GetRequiredService<IOpenIddictApplicationManager>();
 
-        if (await manager.FindByClientIdAsync("angular-app", cancellationToken) is null)
-            await manager.CreateAsync(GetAngularDescriptor(), cancellationToken);
+        if (await manager.FindByClientIdAsync("brewcoffee-bff", cancellationToken) is null)
+            await manager.CreateAsync(GetBffDescriptor(), cancellationToken);
 
         if (await manager.FindByClientIdAsync("worker-service", cancellationToken) is null)
             await manager.CreateAsync(GetWorkerDescriptor(), cancellationToken);
@@ -72,15 +72,17 @@ internal sealed class OpenIddictHostedService(
     private static OpenIddictScopeDescriptor GetApiScopeDescriptor()
         => new() { Name = "api", Description = "CoffeeAgent API Access", Resources = { "coffee_agent_api" } };
 
-    private OpenIddictApplicationDescriptor GetAngularDescriptor()
-        => new()
+    private OpenIddictApplicationDescriptor GetBffDescriptor()
+    {
+        (string clientId, string clientSecret) = configuration.GetProviderAuth("BFF");
+        return new OpenIddictApplicationDescriptor
         {
-            ClientId = "angular-app",
-            ClientType = OpenIddictConstants.ClientTypes.Public,
-            ConsentType = OpenIddictConstants.ConsentTypes.Implicit,
-            DisplayName = "CoffeeAgent Angular App",
-            RedirectUris = { new Uri(configuration.GetOpenIddictClientConfig("Angular", "CallbackUri")) },
-            PostLogoutRedirectUris = { new Uri(configuration.GetOpenIddictClientConfig("Angular", "LogoutUri")) },
+            ClientId = clientId,
+            ClientSecret = clientSecret,
+            ClientType = OpenIddictConstants.ClientTypes.Confidential,
+            DisplayName = "BrewCoffee BFF",
+            RedirectUris = { new Uri(configuration.GetOpenIddictClientConfig("BFF", "CallbackUri")) },
+            PostLogoutRedirectUris = { new Uri(configuration.GetOpenIddictClientConfig("BFF", "LogoutUri")) },
             Permissions =
             {
                 OpenIddictConstants.Permissions.Endpoints.Authorization,
@@ -88,6 +90,7 @@ internal sealed class OpenIddictHostedService(
                 OpenIddictConstants.Permissions.Endpoints.EndSession,
                 OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode,
                 OpenIddictConstants.Permissions.GrantTypes.RefreshToken,
+                OpenIddictConstants.Permissions.GrantTypes.Password,
                 OpenIddictConstants.Permissions.ResponseTypes.Code,
                 OpenIddictConstants.Permissions.Prefixes.Scope + "openid",
                 OpenIddictConstants.Permissions.Prefixes.Scope + "email",
@@ -95,6 +98,7 @@ internal sealed class OpenIddictHostedService(
                 OpenIddictConstants.Permissions.Prefixes.Scope + "api",
             }
         };
+    }
 
     private OpenIddictApplicationDescriptor GetWorkerDescriptor()
     {

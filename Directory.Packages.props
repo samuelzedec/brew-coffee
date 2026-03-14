@@ -12,20 +12,22 @@
     <PackageVersion Include="Mediator.SourceGenerator" Version="3.0.1" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="10.0.3" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="10.0.3" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.5" />
     <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.3" />
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.3" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.3" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.3" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.3" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
-    <PackageVersion Include="Microsoft.Agents.AI" Version="1.0.0-rc3"/>
-    <PackageVersion Include="Microsoft.Agents.AI.Anthropic" Version="1.0.0-rc3"/>
-    <PackageVersion Include="Microsoft.Agents.AI.Hosting" Version="1.0.0-preview.260304.1"/>
+    <PackageVersion Include="Microsoft.Agents.AI" Version="1.0.0-rc3" />
+    <PackageVersion Include="Microsoft.Agents.AI.Anthropic" Version="1.0.0-rc3" />
+    <PackageVersion Include="Microsoft.Agents.AI.Hosting" Version="1.0.0-preview.260304.1" />
     <PackageVersion Include="OpenIddict.AspNetCore" Version="7.2.0" />
     <PackageVersion Include="OpenIddict.EntityFrameworkCore" Version="7.2.0" />
     <PackageVersion Include="Reqnroll.Microsoft.Extensions.DependencyInjection" Version="3.3.3" />
     <PackageVersion Include="Scalar.AspNetCore" Version="2.13.1" />
     <PackageVersion Include="Serilog.AspNetCore" Version="10.0.0" />
+    <PackageVersion Include="Yarp.ReverseProxy" Version="2.3.0" />
     <PackageVersion Include="ZedEndpoints" Version="1.1.1" />
   </ItemGroup>
   <!-- Tests Packages -->

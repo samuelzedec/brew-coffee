@@ -20,17 +20,15 @@ internal static class ConfigurationExtensions
         /// </exception>
         public ClientSettings GetProviderAuth(string provider)
         {
-            var section = configuration
-                .GetSection($"Authentication:{provider}");
-
+            var section = configuration.GetSection($"Authentication:{provider}");
             var clientId = section["ClientId"];
 
-            if (string.IsNullOrWhiteSpace(clientId))
+            if (string.IsNullOrEmpty(clientId))
                 throw new InvalidOperationException($"{provider} ClientId não configurado.");
 
             var clientSecret = section["ClientSecret"];
 
-            if (string.IsNullOrWhiteSpace(clientSecret))
+            if (string.IsNullOrEmpty(clientSecret))
                 throw new InvalidOperationException($"{provider} ClientSecret não configurado.");
 
             return new ClientSettings(clientId, clientSecret);
@@ -53,8 +51,10 @@ internal static class ConfigurationExtensions
         /// </exception>
         public string GetOpenIddictClientConfig(string client, string key)
         {
-            var value = configuration[$"OpenIddict:Clients:{client}:{key}"] ?? throw new InvalidOperationException(
-                $"OpenIddict client '{client}' {key} não configurado.");
+            var value = configuration[$"OpenIddict:Clients:{client}:{key}"];
+
+            if (string.IsNullOrEmpty(value))
+                throw new InvalidOperationException($"OpenIddict client '{client}' {key} não configurado.");
 
             return value;
         }

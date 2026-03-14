@@ -2,6 +2,8 @@ using BrewCoffee.Authorization.Infrastructure.HostedServices;
 using BrewCoffee.Authorization.Infrastructure.Persistence;
 using BrewCoffee.Authorization.Infrastructure.Persistence.Identity;
 using BrewCoffee.Authorization.Infrastructure.Extensions;
+using BrewCoffee.Authorization.Infrastructure.Services;
+using BrewCoffee.Shared.Abstractions.Services;
 using BrewCoffee.Shared.Behaviors;
 using BrewCoffee.Shared.Exceptions;
 using FluentValidation;
@@ -34,7 +36,7 @@ internal static class BuilderSetup
             builder.ConfigureMediatorWithValidation();
             builder.ConfigureLogger();
             builder.ConfigureExceptionHandling();
-            builder.ConfigureHostedServices();
+            builder.ConfigureServices();
         }
 
         private void ConfigureApiDocumentation()
@@ -120,7 +122,8 @@ internal static class BuilderSetup
                     options
                         .AllowClientCredentialsFlow() // > Fluxo M2M: serviços autenticando com client_id + client_secret sem usuário humano
                         .AllowAuthorizationCodeFlow() // > Fluxo para usuários humanos fazendo login via Google, GitHub ou Microsoft
-                        .AllowRefreshTokenFlow(); // > Permite renovar o access_token sem o usuário logar de novo
+                        .AllowRefreshTokenFlow() // > Permite renovar o access_token sem o usuário logar de novo
+                        .AllowPasswordFlow();
 
                     // Força PKCE no Authorization Code Flow
                     // O frontend gera um code_verifier secreto que é validado na troca do token
@@ -166,8 +169,9 @@ internal static class BuilderSetup
             builder.Services.AddAuthorization();
         }
 
-        private void ConfigureHostedServices()
+        private void ConfigureServices()
         {
+            builder.Services.AddTransient<ICurrentUserService, CurrentUserService>();
             builder.Services.AddHostedService<OpenIddictHostedService>();
         }
     }

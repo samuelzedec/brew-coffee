@@ -1,3 +1,4 @@
+using BrewCoffee.Shared.Common;
 using BrewCoffee.Shared.Extensions;
 using Mediator;
 using ZedEndpoints.Abstractions;
@@ -16,9 +17,9 @@ internal sealed class RegisterEndpoint : IEndpoint
                 Em caso de sucesso, retorna o ID e o e-mail do usuário criado, junto ao cabeçalho Location apontando para o recurso.
                 """)
             .Produces<RegisterResponse>(StatusCodes.Status201Created)
-            .ProducesProblem(StatusCodes.Status400BadRequest)
-            .ProducesProblem(StatusCodes.Status409Conflict)
-            .ProducesProblem(StatusCodes.Status500InternalServerError);
+            .Produces<Error>(StatusCodes.Status400BadRequest)
+            .Produces<Error>(StatusCodes.Status409Conflict)
+            .Produces<Error>(StatusCodes.Status500InternalServerError);
 
     private static async Task<IResult> HandleAsync(
         RegisterRequest request,
