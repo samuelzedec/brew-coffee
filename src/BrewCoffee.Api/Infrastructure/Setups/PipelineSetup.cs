@@ -25,11 +25,12 @@ internal static class PipelineSetup
             await app.ApplyMigrationsAsync();
         }
 
-        private async Task ApplyMigrationsAsync()
+        private Task ApplyMigrationsAsync()
         {
-            using var scope = app.Services.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<BrewCoffeeDbContext>();
-            await context.Database.MigrateAsync();
+            return Task.CompletedTask;
+            // using var scope = app.Services.CreateScope();
+            // var context = scope.ServiceProvider.GetRequiredService<BrewCoffeeDbContext>();
+            // await context.Database.MigrateAsync();
         }
 
         private void ConfigureApiDocumentation()

@@ -1,5 +1,6 @@
 using BrewCoffee.Authorization.Infrastructure.Persistence.Identity;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
@@ -11,7 +12,10 @@ internal sealed class UserInfoEndpoint : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app)
         => app.MapGet("/userinfo", HandleAsync)
-            .RequireAuthorization()
+            .RequireAuthorization(new AuthorizeAttribute
+            {
+                AuthenticationSchemes = OpenIddictServerAspNetCoreDefaults.AuthenticationScheme
+            })
             .WithSummary("Informações do usuário")
             .WithDescription(
                 """

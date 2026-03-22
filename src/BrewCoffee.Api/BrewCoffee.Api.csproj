@@ -21,6 +21,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational"/>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL"/>
     <PackageReference Include="Scalar.AspNetCore"/>
+    <PackageReference Include="Scriban" />
     <PackageReference Include="Serilog.AspNetCore"/>
     <PackageReference Include="ZedEndpoints"/>
     <PackageReference Include="Mediator.SourceGenerator">

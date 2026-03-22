@@ -1,6 +1,5 @@
 using BrewCoffee.Authorization.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Scalar.AspNetCore;
 using ZedEndpoints.Extensions;
 
 namespace BrewCoffee.Authorization.Infrastructure.Setups;
@@ -19,11 +18,12 @@ internal static class PipelineSetup
             if (!app.Environment.IsDevelopment())
                 app.UseHttpsRedirection();
 
-            app.ConfigureApiDocumentation();
-            app.MapEndpointGroups(globalPrefix: "api/v1");
+            app.MapEndpointGroups();
             app.UseExceptionHandler();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.MapRazorPages();
+            app.MapGet("/", () => Results.Redirect("/login"));
             await app.ApplyMigrationsAsync();
         }
 
@@ -32,16 +32,6 @@ internal static class PipelineSetup
             using var scope = app.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<BrewCoffeeAuthDbContext>();
             await context.Database.MigrateAsync();
-        }
-
-        private void ConfigureApiDocumentation()
-        {
-            if (!app.Environment.IsDevelopment())
-                return;
-
-            app.MapOpenApi();
-            app.MapScalarApiReference();
-            app.MapGet("/", () => Results.Redirect("/scalar/v1")).ExcludeFromDescription();
         }
     }
 }

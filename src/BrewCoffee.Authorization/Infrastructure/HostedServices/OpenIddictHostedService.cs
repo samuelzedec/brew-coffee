@@ -96,6 +96,8 @@ internal sealed class OpenIddictHostedService(
                 OpenIddictConstants.Permissions.Prefixes.Scope + "email",
                 OpenIddictConstants.Permissions.Prefixes.Scope + "profile",
                 OpenIddictConstants.Permissions.Prefixes.Scope + "api",
+                OpenIddictConstants.Permissions.Prefixes.Scope + "roles",
+                OpenIddictConstants.Permissions.Prefixes.Scope + "offline_access"
             }
         };
     }

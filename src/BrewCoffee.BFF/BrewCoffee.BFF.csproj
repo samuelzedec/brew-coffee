@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <UserSecretsId>c1910edf-459f-4409-9599-8686abb50609</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect"/>
+    <PackageReference Include="Scalar.AspNetCore"/>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi"/>
+    <PackageReference Include="Serilog.AspNetCore"/>
+    <PackageReference Include="Yarp.ReverseProxy"/>
+    <PackageReference Include="ZedEndpoints"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BrewCoffee.Shared\BrewCoffee.Shared.csproj"/>
+  </ItemGroup>
+</Project>

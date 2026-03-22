@@ -1,9 +1,11 @@
 using System.Security.Claims;
-using BrewCoffee.Authorization.Infrastructure.Persistence.Identity;
 using BrewCoffee.Authorization.Infrastructure.Extensions;
+using BrewCoffee.Authorization.Infrastructure.Persistence.Identity;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
+using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
 using ZedEndpoints.Abstractions;
 
@@ -12,9 +14,7 @@ namespace BrewCoffee.Authorization.Features.Connect.Authorize;
 internal sealed class AuthorizeEndpoint : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app)
-        => app.MapGet("/authorize", HandleAsync)
-            .ExcludeFromDescription();
-
+        => app.MapGet("/authorize", HandleAsync).ExcludeFromDescription();
 
     private static async Task<IResult> HandleAsync(
         HttpContext context,
@@ -24,31 +24,42 @@ internal sealed class AuthorizeEndpoint : IEndpoint
     {
         var request = context.GetOpenIddictServerRequest();
         if (request is null) return Results.BadRequest("OpenIddict request not found.");
+        var provider = request.GetParameter("provider")?.ToString();
 
-        var result = await context.AuthenticateAsync(IdentityConstants.ExternalScheme);
-        if (!result.Succeeded)
+        var localResult = await context.AuthenticateAsync(IdentityConstants.ApplicationScheme);
+        if (localResult.Succeeded)
         {
-            var provider = request
-                .GetParameter("provider")?.ToString() ?? "Google";
+            var localUser = await userManager.FindByEmailAsync(
+                localResult.Principal!.FindFirstValue(ClaimTypes.Email)!);
 
-            var properties = signInManager.ConfigureExternalAuthenticationProperties(
-                provider,
-                "/connect/external-callback");
+            if (localUser is null) return Results.Forbid();
 
-            return Results.Challenge(properties, [provider]);
+            var localPrincipal = await signInManager.CreateUserPrincipalAsync(localUser);
+            localPrincipal.ConfigurePrincipal();
+
+            return Results.SignIn(
+                principal: localPrincipal,
+                authenticationScheme: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme
+            );
         }
 
-        var info = await signInManager.GetExternalLoginInfoAsync();
-        if (info is null) return Results.Forbid();
+        var externalResult = await context.AuthenticateAsync(IdentityConstants.ExternalScheme);
+        if (externalResult.Succeeded)
+        {
+            var info = await signInManager.GetExternalLoginInfoAsync();
+            if (info is null) return Results.Forbid();
 
-        var user = await FindOrCreateUserAsync(info, userManager);
-        var principal = await signInManager.CreateUserPrincipalAsync(user);
-        principal.ConfigurePrincipal();
+            var user = await FindOrCreateUserAsync(info, userManager);
+            var principal = await signInManager.CreateUserPrincipalAsync(user);
+            principal.ConfigurePrincipal(request.GetScopes());
 
-        return Results.SignIn(
-            principal: principal,
-            authenticationScheme: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme
-        );
+            return Results.SignIn(
+                principal: principal,
+                authenticationScheme: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme
+            );
+        }
+
+        return RedirectToLogin(provider, signInManager, context);
     }
 
     /// <summary>
@@ -79,10 +90,25 @@ internal sealed class AuthorizeEndpoint : IEndpoint
             return user;
         }
 
-        user = new ApplicationUser { UserName = email, Email = email, EmailConfirmed = true };
+        user = new ApplicationUser { UserName = email.Split('@')[0], Email = email, EmailConfirmed = true };
         await userManager.CreateAsync(user);
         await userManager.AddLoginAsync(user, info);
 
         return user;
+    }
+
+    private static IResult RedirectToLogin(
+        string? provider,
+        SignInManager<ApplicationUser> signInManager,
+        HttpContext context)
+    {
+        var returnUrl = Uri.EscapeDataString(context.Request.GetEncodedPathAndQuery());
+
+        if (string.IsNullOrWhiteSpace(provider) || provider == "local")
+            return Results.Redirect($"/login?returnUrl={returnUrl}");
+
+        var callbackUrl = $"/connect/external-callback?returnUrl={returnUrl}";
+        var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, callbackUrl);
+        return Results.Challenge(properties, [provider]);
     }
 }

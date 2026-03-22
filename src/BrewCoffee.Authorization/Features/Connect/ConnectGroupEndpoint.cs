@@ -1,6 +1,7 @@
 using BrewCoffee.Authorization.Features.Connect.Authorize;
 using BrewCoffee.Authorization.Features.Connect.EndSession;
 using BrewCoffee.Authorization.Features.Connect.ExternalCallback;
+using BrewCoffee.Authorization.Features.Connect.ExternalLogin;
 using BrewCoffee.Authorization.Features.Connect.Token;
 using BrewCoffee.Authorization.Features.Connect.UserInfo;
 using ZedEndpoints.Abstractions;
@@ -23,6 +24,7 @@ internal sealed class ConnectGroupEndpoint : IEndpointGroup
             .MapEndpoint<ExternalCallbackEndpoint>()
             .MapEndpoint<TokenEndpoint>()
             .MapEndpoint<UserInfoEndpoint>()
-            .MapEndpoint<EndSessionEndpoint>();
+            .MapEndpoint<EndSessionEndpoint>()
+            .MapEndpoint<ExternalLoginEndpoint>();
     }
 }

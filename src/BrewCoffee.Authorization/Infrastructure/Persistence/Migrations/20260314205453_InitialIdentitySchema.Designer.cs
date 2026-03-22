@@ -3,6 +3,7 @@ using System;
 using BrewCoffee.Authorization.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BrewCoffee.Authorization.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(BrewCoffeeAuthDbContext))]
-    partial class CoffeeAuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260314205453_InitialIdentitySchema")]
+    partial class InitialIdentitySchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -575,8 +578,8 @@ namespace BrewCoffee.Authorization.Infrastructure.Persistence.Migrations
                         .HasColumnName("subject");
 
                     b.Property<string>("Type")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("type");
 
                     b.Property<Guid?>("application_id")

@@ -1,17 +1,28 @@
 <Solution>
-  <Folder Name="/Solution Items/">
-    <File Path="Dockerfile" />
-    <File Path=".dockerignore" />
-    <File Path=".gitignore" />
-    <File Path=".editorconfig" />
+  <Folder Name="/global/">
+    <File Path=".gitignore"/>
+    <File Path=".aiignore"/>
+    <File Path=".editorconfig"/>
+    <File Path="Directory.Build.props"/>
+    <File Path="Directory.Packages.props"/>
+    <File Path="README.md"/>
+  </Folder>
+  <Folder Name="/docs/">
+    <File Path="docs/01-visao-geral.md"/>
+    <File Path="docs/02-authorization-server-setup.md"/>
+    <File Path="docs/03-openiddict-seeds.md"/>
+    <File Path="docs/04-authorization-endpoints.md"/>
+    <File Path="docs/05-bff.md"/>
+    <File Path="docs/06-fluxos-oauth2.md"/>
   </Folder>
   <Folder Name="/src/">
-    <Project Path="src\BrewCoffee.Api\BrewCoffee.Api.csproj" />
-    <Project Path="src\BrewCoffee.Authorization\BrewCoffee.Authorization.csproj" />
-    <Project Path="src\BrewCoffee.Shared\BrewCoffee.Shared.csproj" />
+    <Project Path="src/BrewCoffee.BFF/BrewCoffee.BFF.csproj"/>
+    <Project Path="src/BrewCoffee.Api/BrewCoffee.Api.csproj"/>
+    <Project Path="src/BrewCoffee.Authorization/BrewCoffee.Authorization.csproj"/>
+    <Project Path="src/BrewCoffee.Shared/BrewCoffee.Shared.csproj"/>
   </Folder>
   <Folder Name="/tests/">
-    <Project Path="tests\BrewCoffee.AcceptanceTests\BrewCoffee.AcceptanceTests.csproj" />
-    <Project Path="tests\BrewCoffee.UnitTests\BrewCoffee.UnitTests.csproj" />
+    <Project Path="tests/BrewCoffee.AcceptanceTests/BrewCoffee.AcceptanceTests.csproj"/>
+    <Project Path="tests/BrewCoffee.UnitTests/BrewCoffee.UnitTests.csproj"/>
   </Folder>
 </Solution>

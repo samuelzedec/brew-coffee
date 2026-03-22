@@ -12,8 +12,7 @@ namespace BrewCoffee.Authorization.Features.Connect.Token;
 internal sealed class TokenEndpoint : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app)
-        => app.MapPost("/token", HandleAsync)
-            .ExcludeFromDescription();
+        => app.MapPost("/token", HandleAsync).ExcludeFromDescription();
 
     private static async Task<IResult> HandleAsync(
         HttpContext context,
@@ -28,11 +27,12 @@ internal sealed class TokenEndpoint : IEndpoint
 
         return !request.IsAuthorizationCodeGrantType() && !request.IsRefreshTokenGrantType()
             ? Results.BadRequest("Invalid grant type.")
-            : await IssueTokenAsync(context, signInManager, userManager);
+            : await IssueTokenAsync(context, request, signInManager, userManager);
     }
 
     private static async Task<IResult> IssueTokenAsync(
         HttpContext context,
+        OpenIddictRequest request,
         SignInManager<ApplicationUser> signInManager,
         UserManager<ApplicationUser> userManager)
     {
@@ -47,7 +47,7 @@ internal sealed class TokenEndpoint : IEndpoint
             return Results.Forbid();
 
         var principal = await signInManager.CreateUserPrincipalAsync(user);
-        principal.ConfigurePrincipal();
+        principal.ConfigurePrincipal(request.GetScopes());
 
         return Results.SignIn(
             principal: principal,

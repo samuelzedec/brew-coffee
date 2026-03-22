@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BrewCoffee.Authorization.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialSchemaDatabase : Migration
+    public partial class InitialIdentitySchema : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -294,7 +294,7 @@ namespace BrewCoffee.Authorization.Infrastructure.Persistence.Migrations
                     reference_id = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     status = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     subject = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: true),
-                    type = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
+                    type = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {

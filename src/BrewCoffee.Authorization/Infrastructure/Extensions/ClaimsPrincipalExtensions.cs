@@ -8,20 +8,23 @@ public static class ClaimsPrincipalExtensions
     extension(ClaimsPrincipal principal)
     {
         /// <summary>
-        /// Configura um objeto <see cref="ClaimsPrincipal"/> com escopos padrão e destinos de claims.
+        /// Configura as informações do <see cref="ClaimsPrincipal"/> com base em
+        /// identificadores e escopos fornecidos.
         /// </summary>
-        /// <remarks>
-        /// Este método define escopos padrão no principal, como OpenId, Email, Profile e OfflineAccess.
-        /// Além disso, associa destinos específicos às claims com base em seu tipo.
-        /// </remarks>
-        public void ConfigurePrincipal()
+        /// <param name="scopes">
+        /// Uma coleção de escopos que serão configurados no <see cref="ClaimsPrincipal"/>.
+        /// Pode ser nulo caso não haja escopos específicos a serem utilizados.
+        /// </param>
+        public void ConfigurePrincipal(IEnumerable<string>? scopes = null)
         {
-            principal.SetScopes([
-                OpenIddictConstants.Scopes.OpenId,
-                OpenIddictConstants.Scopes.Email,
-                OpenIddictConstants.Scopes.Profile,
-                OpenIddictConstants.Scopes.OfflineAccess
-            ]);
+            var subject =
+                principal.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                ?? principal.FindFirst("sub")?.Value;
+
+            if (subject is not null)
+                principal.SetClaim(OpenIddictConstants.Claims.Subject, subject);
+
+            principal.SetScopes(scopes);
 
             principal.SetDestinations(claim => claim.Type switch
             {

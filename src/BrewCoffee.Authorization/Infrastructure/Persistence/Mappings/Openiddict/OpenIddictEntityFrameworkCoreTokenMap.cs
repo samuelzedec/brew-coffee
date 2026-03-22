@@ -54,7 +54,7 @@ internal sealed class OpenIddictEntityFrameworkCoreTokenMap
 
         builder.Property(x => x.Type)
             .HasColumnName("type")
-            .HasMaxLength(50);
+            .HasMaxLength(100);
 
         builder.HasOne(x => x.Application)
             .WithMany(x => x.Tokens)
