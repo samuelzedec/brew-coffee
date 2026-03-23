@@ -12,7 +12,7 @@ namespace BrewCoffee.Authorization.Features.Connect.Token;
 internal sealed class TokenEndpoint : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app)
-        => app.MapPost("/token", HandleAsync).ExcludeFromDescription();
+        => app.MapPost("/token", HandleAsync);
 
     private static async Task<IResult> HandleAsync(
         HttpContext context,

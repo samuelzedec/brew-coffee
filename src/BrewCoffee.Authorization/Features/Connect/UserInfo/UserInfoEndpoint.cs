@@ -15,17 +15,7 @@ internal sealed class UserInfoEndpoint : IEndpoint
             .RequireAuthorization(new AuthorizeAttribute
             {
                 AuthenticationSchemes = OpenIddictServerAspNetCoreDefaults.AuthenticationScheme
-            })
-            .WithSummary("Informações do usuário")
-            .WithDescription(
-                """
-                Retorna as claims do usuário autenticado via token OpenIddict.
-                Valida o token de acesso pelo esquema do servidor OpenIddict, extrai o subject claim para localizar o usuário na base de dados
-                e retorna um dicionário com as claims: sub (ID), email, email_verified e name (nome de usuário).
-                """)
-            .Produces<Dictionary<string, object>>()
-            .ProducesProblem(StatusCodes.Status401Unauthorized)
-            .ProducesProblem(StatusCodes.Status403Forbidden);
+            });
 
     private static async Task<IResult> HandleAsync(
         HttpContext context,

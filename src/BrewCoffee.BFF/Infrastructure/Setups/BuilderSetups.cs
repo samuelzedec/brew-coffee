@@ -1,5 +1,9 @@
+using System.IdentityModel.Tokens.Jwt;
+using BrewCoffee.BFF.Infrastructure.Services;
 using BrewCoffee.BFF.Infrastructure.Transformers;
 using BrewCoffee.BFF.Shared.Constants;
+using BrewCoffee.Shared.Abstractions.Services;
+using BrewCoffee.Shared.Exceptions;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -8,23 +12,24 @@ using Serilog.Events;
 
 namespace BrewCoffee.BFF.Infrastructure.Setups;
 
-internal static class BuildSetups
+internal static class BuilderSetups
 {
     extension(WebApplicationBuilder builder)
     {
+        /// <summary>
+        /// Configura os serviços e middleware essenciais utilizados pelo aplicativo.
+        /// Este método realiza a configuração de dependências como registro em log,
+        /// autenticação, documentação de API, proxy reverso, cliente HTTP e políticas de CORS.
+        /// </summary>
         public void Configure()
         {
             builder.ConfigureLogger();
-            builder.ConfigureApiDocumentation();
+            builder.ConfigureExceptionHandling();
             builder.ConfigureAuthentication();
+            builder.ConfigureServices();
             builder.ConfigureProxy();
             builder.ConfigureHttpClient();
             builder.ConfigureCors();
-        }
-
-        private void ConfigureApiDocumentation()
-        {
-            builder.Services.AddOpenApi();
         }
 
         private void ConfigureLogger()
@@ -38,6 +43,18 @@ internal static class BuildSetups
 
             builder.Logging.ClearProviders();
             builder.Logging.AddSerilog();
+        }
+
+        private void ConfigureExceptionHandling()
+        {
+            builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddProblemDetails();
+        }
+
+        private void ConfigureServices()
+        {
+            builder.Services.AddTransient<ICurrentUserService, CurrentUserService>();
         }
 
         private void ConfigureAuthentication()

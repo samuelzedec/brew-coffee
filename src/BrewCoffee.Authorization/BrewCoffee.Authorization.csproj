@@ -3,26 +3,35 @@
     <UserSecretsId>883e5843-645c-49bc-bc3f-bb9953f50c03</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <InternalsVisibleTo Include="CoffeeAgent.AcceptanceTests" />
-    <InternalsVisibleTo Include="CoffeeAgent.UnitTests" />
+    <InternalsVisibleTo Include="CoffeeAgent.AcceptanceTests"/>
+    <InternalsVisibleTo Include="CoffeeAgent.UnitTests"/>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="FluentValidation"/>
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions"/>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google"/>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount"/>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
-    <PackageReference Include="OpenIddict.AspNetCore" />
-    <PackageReference Include="OpenIddict.EntityFrameworkCore" />
-    <PackageReference Include="Serilog.AspNetCore" />
-    <PackageReference Include="ZedEndpoints" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational"/>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL"/>
+    <PackageReference Include="OpenIddict.AspNetCore"/>
+    <PackageReference Include="OpenIddict.EntityFrameworkCore"/>
+    <PackageReference Include="Serilog.AspNetCore"/>
+    <PackageReference Include="ZedEndpoints"/>
+    <PackageReference Include="Mediator.SourceGenerator">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BrewCoffee.Shared\BrewCoffee.Shared.csproj" />
+    <ProjectReference Include="..\BrewCoffee.Shared\BrewCoffee.Shared.csproj"/>
+  </ItemGroup>
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\ChangePassword\Index.cshtml"/>
   </ItemGroup>
 </Project>

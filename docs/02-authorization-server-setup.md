@@ -1,7 +1,7 @@
 # 02 — Authorization Server: Setup e Configuração
 
 > **Referências:**
-> - OpenIddict — configuração do servidor: https://documentation.openiddict.com/configuration/server-configuration
+> - OpenIddict — configuração do servidor: https://documentation.openiddict.com/configuration/
 > - OpenIddict + EF Core: https://documentation.openiddict.com/integrations/entity-framework-core
 > - ASP.NET Core Identity: https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity
 > - PKCE (RFC 7636): https://www.rfc-editor.org/rfc/rfc7636

@@ -8,16 +8,7 @@ namespace BrewCoffee.Authorization.Features.Connect.EndSession;
 internal sealed class EndSessionEndpoint : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app)
-        => app.MapGet("/end-session", HandleAsync)
-            .WithSummary("Encerrar sessão")
-            .WithDescription(
-                """
-                Realiza o logout completo do usuário atual.
-                Invoca o SignOutAsync do Identity para limpar o cookie de sessão local e, em seguida,
-                encerra os esquemas de autenticação do Identity (ApplicationScheme) e do servidor OpenIddict,
-                invalidando o token de acesso ativo.
-                """)
-            .Produces(StatusCodes.Status200OK);
+        => app.MapGet("/end-session", HandleAsync);
 
     private static async Task<IResult> HandleAsync(
         HttpContext context,

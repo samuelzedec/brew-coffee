@@ -11,6 +11,11 @@ public interface ICurrentUserService
     string Id { get; }
 
     /// <summary>
+    /// Nome do usuário atualmente autenticado.
+    /// </summary>
+    string Name { get; }
+
+    /// <summary>
     /// Endereço de e-mail associado ao usuário atual.
     /// </summary>
     string Email { get; }

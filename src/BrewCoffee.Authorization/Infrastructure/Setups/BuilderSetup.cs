@@ -4,7 +4,9 @@ using BrewCoffee.Authorization.Infrastructure.Persistence;
 using BrewCoffee.Authorization.Infrastructure.Persistence.Identity;
 using BrewCoffee.Authorization.Infrastructure.Services;
 using BrewCoffee.Shared.Abstractions.Services;
+using BrewCoffee.Shared.Behaviors;
 using BrewCoffee.Shared.Exceptions;
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OpenIddict.Abstractions;
@@ -29,10 +31,11 @@ internal static class BuilderSetup
         {
             builder.ConfigureDbContext();
             builder.ConfigureIdentity();
+            builder.ConfigureExceptionHandling();
             builder.ConfigureOpenIddict();
             builder.ConfigureAuthentication();
+            builder.ConfigureMediatorWithValidation();
             builder.ConfigureLogger();
-            builder.ConfigureExceptionHandling();
             builder.ConfigureServices();
             builder.ConfigureRazorPages();
         }
@@ -81,6 +84,20 @@ internal static class BuilderSetup
                 .AddDefaultTokenProviders();
         }
 
+        private void ConfigureMediatorWithValidation()
+        {
+            builder.Services.AddMediator(options =>
+            {
+                options.ServiceLifetime = ServiceLifetime.Scoped;
+                options.PipelineBehaviors = [typeof(ValidationBehavior<,>)];
+            });
+
+            builder.Services.AddValidatorsFromAssembly(
+                typeof(Program).Assembly,
+                includeInternalTypes: true
+            );
+        }
+
         private void ConfigureOpenIddict()
         {
             builder.Services.AddOpenIddict()
@@ -108,7 +125,8 @@ internal static class BuilderSetup
                         OpenIddictConstants.Scopes.Email,
                         OpenIddictConstants.Scopes.Profile,
                         OpenIddictConstants.Scopes.Roles,
-                        OpenIddictConstants.Scopes.OfflineAccess
+                        OpenIddictConstants.Scopes.OfflineAccess,
+                        "api"
                     );
 
                     // Força PKCE (Proof Key for Code Exchange) no Authorization Code Flow
@@ -160,8 +178,6 @@ internal static class BuilderSetup
         }
 
         private void ConfigureRazorPages()
-        {
-            builder.Services.AddRazorPages();
-        }
+            => builder.Services.AddRazorPages();
     }
 }

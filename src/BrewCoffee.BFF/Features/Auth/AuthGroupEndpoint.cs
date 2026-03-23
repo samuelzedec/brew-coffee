@@ -1,3 +1,6 @@
+using BrewCoffee.BFF.Features.Auth.Login;
+using BrewCoffee.BFF.Features.Auth.Logout;
+using BrewCoffee.BFF.Features.Auth.Me;
 using ZedEndpoints.Abstractions;
 using ZedEndpoints.Extensions;
 
@@ -9,7 +12,7 @@ internal sealed class AuthGroupEndpoint : IEndpointGroup
     {
         var group = app
             .MapGroup("/auth")
-            .WithTags("Auth");
+            .RequireAuthorization();
 
         group
             .MapEndpoint<LoginEndpoint>()

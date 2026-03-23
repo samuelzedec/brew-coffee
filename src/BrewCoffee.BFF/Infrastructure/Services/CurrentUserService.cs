@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using BrewCoffee.Shared.Abstractions.Services;
 
-namespace BrewCoffee.Authorization.Infrastructure.Services;
+namespace BrewCoffee.BFF.Infrastructure.Services;
 
 internal sealed class CurrentUserService(IHttpContextAccessor httpContextAccessor)
     : ICurrentUserService

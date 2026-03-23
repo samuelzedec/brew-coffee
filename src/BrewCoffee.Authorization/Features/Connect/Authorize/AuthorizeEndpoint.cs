@@ -14,7 +14,7 @@ namespace BrewCoffee.Authorization.Features.Connect.Authorize;
 internal sealed class AuthorizeEndpoint : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app)
-        => app.MapGet("/authorize", HandleAsync).ExcludeFromDescription();
+        => app.MapGet("/authorize", HandleAsync);
 
     private static async Task<IResult> HandleAsync(
         HttpContext context,

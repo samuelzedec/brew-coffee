@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BrewCoffee.Api.Infrastructure.Persistence.Mappings;
 
-public abstract class BaseEntityTypeConfiguration<T> : IEntityTypeConfiguration<T>
+internal abstract class BaseEntityTypeConfiguration<T> : IEntityTypeConfiguration<T>
     where T : Entity
 {
     /// <summary>
