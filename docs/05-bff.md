@@ -24,16 +24,21 @@ O BFF resolve isso:
 BrewCoffee.BFF/
 ├── Features/
 │   └── Auth/
-│       ├── AuthGroupEndpoint.cs   ← agrupa em /auth
-│       ├── LoginEndpoint.cs       → GET  /auth/login
-│       ├── LogoutEndpoint.cs      → POST /auth/logout
-│       └── MeEndpoint.cs          → GET  /auth/me
+│       ├── AuthGroupEndpoint.cs      ← agrupa em /auth
+│       ├── Login/
+│       │   └── LoginEndpoint.cs      → GET  /auth/login
+│       ├── Logout/
+│       │   └── LogoutEndpoint.cs     → POST /auth/logout
+│       └── Me/
+│           └── MeEndpoint.cs         → GET  /auth/me
 ├── Infrastructure/
+│   ├── Services/
+│   │   └── CurrentUserService.cs
 │   ├── Setups/
-│   │   ├── BuildSetups.cs         ← registra todos os serviços
-│   │   └── PipelineSetup.cs       ← monta o pipeline HTTP
+│   │   ├── BuilderSetups.cs          ← registra todos os serviços
+│   │   └── PipelineSetup.cs          ← monta o pipeline HTTP
 │   └── Transformers/
-│       └── TokenTransformer.cs    ← injeta Bearer token nos requests proxiados
+│       └── TokenTransformer.cs       ← injeta Bearer token nos requests proxiados
 └── Shared/
     └── Constants/
         └── HttpClientConstants.cs
@@ -41,7 +46,7 @@ BrewCoffee.BFF/
 
 ---
 
-## BuildSetups: configuração do BFF
+## BuilderSetups: configuração do BFF
 
 ### Autenticação: Cookie + OpenIdConnect
 
@@ -109,6 +114,10 @@ O YARP (Yet Another Reverse Proxy) lê as rotas do `appsettings.json` e age como
     "brew-coffee-api": {
       "ClusterId": "brew-coffee-api",
       "Match": { "Path": "/api/{**catch-all}" }
+    },
+    "brew-coffee-auth": {
+      "ClusterId": "brew-coffee-auth",
+      "Match": { "Path": "/account/{**catch-all}" }
     }
   },
   "Clusters": {
@@ -116,12 +125,17 @@ O YARP (Yet Another Reverse Proxy) lê as rotas do `appsettings.json` e age como
       "Destinations": {
         "destination1": { "Address": "https://localhost:7272" }
       }
+    },
+    "brew-coffee-auth": {
+      "Destinations": {
+        "destination1": { "Address": "https://localhost:7295" }
+      }
     }
   }
 }
 ```
 
-O BFF hoje proxia apenas requests para a `BrewCoffee.Api` — qualquer coisa que começa com `/api/` é encaminhada para `https://localhost:7272`.
+O BFF proxia dois destinos: `/api/` para a `BrewCoffee.Api` (`https://localhost:7272`) e `/account/` para o `BrewCoffee.Authorization` (`https://localhost:7295`). O `TokenTransformer` injeta o Bearer token em ambas as rotas.
 
 ### CORS para o Angular
 
@@ -163,7 +177,7 @@ internal sealed class TokenTransformer : ITransformProvider
 }
 ```
 
-O `TokenTransformer` injeta o Bearer token em **todos** os requests proxiados pelo YARP. Como a única rota proxiada é `/api/`, que requer autenticação, isso é correto — não há rotas públicas sendo proxiadas atualmente.
+O `TokenTransformer` injeta o Bearer token em **todos** os requests proxiados pelo YARP — tanto para `/api/` quanto para `/account/`. Ambas as rotas requerem autenticação.
 
 **Como funciona na prática:**
 
@@ -245,18 +259,12 @@ O resultado é que o usuário fica deslogado tanto no BFF quanto no AS.
 Retorna os dados do usuário logado a partir do cookie de sessão. Não chama banco nem token.
 
 ```csharp
-private static IResult Handle(HttpContext context)
-{
-    var user = context.User;
-
-    var response = new UserResponse(
-        Id:    user.FindFirstValue("sub")!,
-        Email: user.FindFirstValue("email")!,
-        Name:  user.FindFirstValue("name")!
-    );
-
-    return Results.Ok(response);
-}
+private static IResult Handle(ICurrentUserService currentUserService)
+    => Results.Ok(new UserResponse(
+        Id:    currentUserService.Id,
+        Email: currentUserService.Email,
+        Name:  currentUserService.Name
+    ));
 ```
 
-O Angular chama esse endpoint para saber se o usuário está logado e obter os dados básicos para exibir na UI. As claims `sub`, `email` e `name` foram populadas pelo `GetClaimsFromUserInfoEndpoint = true` durante o login.
+O Angular chama esse endpoint para saber se o usuário está logado e obter os dados básicos para exibir na UI. O `ICurrentUserService` encapsula a leitura das claims do `HttpContext.User`, lidando com a diferença entre `ClaimTypes.NameIdentifier` e `"sub"` dependendo do esquema de autenticação. As claims foram populadas pelo `GetClaimsFromUserInfoEndpoint = true` durante o login.

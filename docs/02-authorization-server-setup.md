@@ -11,6 +11,11 @@
 ```
 BrewCoffee.Authorization/
 ├── Features/
+│   ├── Account/
+│   │   ├── AccountGroupEndpoint.cs
+│   │   ├── ChangePassword/    → PATCH /account/change-password
+│   │   ├── HasPassword/       → GET   /account/password/exists
+│   │   └── Profile/           → PATCH /account/profile
 │   └── Connect/
 │       ├── Authorize/         → GET  /connect/authorize
 │       ├── EndSession/        → GET  /connect/end-session
@@ -20,8 +25,7 @@ BrewCoffee.Authorization/
 │       └── UserInfo/          → GET  /connect/userinfo
 ├── Pages/
 │   ├── Login/                 → /login        (Razor Page)
-│   ├── Register/              → /register     (Razor Page)
-│   └── ChangePassword/        → /change-password (Razor Page)
+│   └── Register/              → /register     (Razor Page)
 └── Infrastructure/
     ├── Extensions/
     │   ├── ClaimsPrincipalExtensions.cs
@@ -52,10 +56,11 @@ public void Configure()
 {
     builder.ConfigureDbContext();
     builder.ConfigureIdentity();
+    builder.ConfigureExceptionHandling();
     builder.ConfigureOpenIddict();
     builder.ConfigureAuthentication();
+    builder.ConfigureMediatorWithValidation();
     builder.ConfigureLogger();
-    builder.ConfigureExceptionHandling();
     builder.ConfigureServices();
     builder.ConfigureRazorPages();   // ← UI de login/registro
 }
@@ -196,7 +201,9 @@ app.MapRazorPages();
 app.MapGet("/", () => Results.Redirect("/login"));
 ```
 
-As Razor Pages substituem os antigos endpoints `/account/register` e `/account/change-password`. Agora essas operações acontecem no próprio servidor de identidade, com UI real. A raiz `/` redireciona para `/login`.
+As Razor Pages cobrem as operações de autenticação que o browser acessa diretamente durante o fluxo OAuth2 — Login e Registro. A raiz `/` redireciona para `/login`.
+
+A troca de senha e demais operações de conta foram movidas para endpoints de API sob `/account/` (ver `Features/Account/`), acessíveis via BFF com Bearer token.
 
 ---
 

@@ -14,10 +14,13 @@
                    │ BrewCoffee.Authorization │
                    │ (porta 7295)             │
                    │                          │
-                   │  /login   (Razor Page)   │
+                   │  /login    (Razor Page)   │
                    │  /register (Razor Page)  │
                    │  /connect/authorize      │
                    │  /connect/token          │
+                   │  /account/change-password│
+                   │  /account/profile        │
+                   │  /account/password/exists│
                    └──────────────────────────┘
 ```
 
@@ -29,7 +32,8 @@
 
 - **Emitir tokens** (access_token, refresh_token, id_token)
 - **Gerenciar usuários** via ASP.NET Core Identity
-- **Hospedar a UI de autenticação** com Razor Pages (Login, Registro, Troca de senha)
+- **Hospedar a UI de autenticação** com Razor Pages (Login, Registro)
+- **Expor endpoints de conta** como API REST (troca de senha, atualização de perfil, verificação de senha)
 - **Federar login externo** (Google, Microsoft) — o usuário autentica com o provedor e o AS cria ou encontra o usuário local
 - **Expor o UserInfo endpoint** para leitura de claims após autenticação
 
@@ -52,10 +56,11 @@ O BFF resolve isso sendo um **intermediário confiável**:
 
 1. Armazena o access_token em **cookie HttpOnly** (JavaScript não consegue ler)
 2. Recebe requests do Angular sem token visível
-3. Injeta o Bearer token automaticamente antes de repassar para a API (via YARP + `TokenTransformer`)
+3. Injeta o Bearer token automaticamente antes de repassar para a API ou para o AS (via YARP + `TokenTransformer`)
 
 ```
-Angular → BFF (cookie de sessão) → API (Bearer token no header)
+Angular → BFF (cookie de sessão) → API     (Bearer token no header)
+                                 → AS /account/* (Bearer token no header)
                 ↕ OAuth2 Authorization Code Flow + PKCE
           Authorization Server
 ```
@@ -72,7 +77,7 @@ A API real de negócio. Recebe requests com `Authorization: Bearer {token}` e va
 
 | Camada | Quem autentica | O que armazena | Protege |
 |---|---|---|---|
-| **Authorization Server** | Usuários (Razor Pages: senha, Google, Microsoft) e clientes M2M | Usuários, tokens, aplicações OAuth2 | Base de identidade |
+| **Authorization Server** | Usuários (Razor Pages: senha, Google, Microsoft) e clientes M2M | Usuários, tokens, aplicações OAuth2 | Base de identidade e operações de conta |
 | **BFF** | Cookie de sessão HttpOnly do browser | access_token + refresh_token na sessão do servidor | Frontend Angular |
 | **API** | Bearer token no header Authorization | Nada (stateless) | Recursos de negócio |
 

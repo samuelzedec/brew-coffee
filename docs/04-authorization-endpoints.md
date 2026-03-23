@@ -6,7 +6,7 @@
 > - OpenIddict — SetDestinations (claim destinations): https://documentation.openiddict.com/configuration/claim-destinations
 > - ASP.NET Core Razor Pages: https://learn.microsoft.com/en-us/aspnet/core/razor-pages/
 
-Todos os endpoints OAuth2/OIDC ficam sob o prefixo `/connect`. As operações de usuário (login, registro, troca de senha) são **Razor Pages** — páginas com UI real que o browser acessa diretamente.
+Os endpoints OAuth2/OIDC ficam sob o prefixo `/connect`. As operações de autenticação acessadas diretamente pelo browser (login, registro) são **Razor Pages**. As operações de conta do usuário já autenticado (troca de senha, perfil) são **endpoints de API** sob `/account/`, acessíveis via BFF.
 
 ---
 
@@ -300,9 +300,9 @@ O `signInManager.SignOutAsync()` limpa o cookie de sessão do Identity no AS. O 
 
 ---
 
-## Razor Pages: Login, Registro e Troca de Senha
+## Razor Pages: Login e Registro
 
-**Localização:** `Pages/Login/`, `Pages/Register/`, `Pages/ChangePassword/`
+**Localização:** `Pages/Login/`, `Pages/Register/`
 
 Estas são páginas com UI real renderizadas pelo AS. O browser as acessa diretamente durante o fluxo OAuth2.
 
@@ -316,6 +316,22 @@ Também exibe botões "Entrar com Google" e "Entrar com Microsoft" que apontam p
 
 Cria um novo usuário com email e senha. Após o registro, redireciona para `/login`.
 
-**Troca de senha (`/change-password`)**
+---
 
-Requer que o usuário esteja autenticado localmente (cookie `ApplicationScheme`). Valida a senha atual e define a nova.
+## Account Endpoints
+
+**Localização:** `Features/Account/`
+
+Endpoints de API para operações sobre a conta do usuário já autenticado. Todos exigem autenticação (Bearer token) e são acessados pelo Angular via BFF — o YARP proxia `/account/{**catch-all}` para o AS, e o `TokenTransformer` injeta o token automaticamente.
+
+**PATCH /account/change-password**
+
+Altera a senha do usuário. Se o usuário tiver senha cadastrada, valida a senha atual antes de definir a nova. Usuários que entraram apenas por provedor externo (Google, Microsoft) não têm senha — nesse caso a validação da senha atual é pulada.
+
+**PATCH /account/profile**
+
+Atualiza dados do perfil do usuário — username e/ou email.
+
+**GET /account/password/exists**
+
+Verifica se o usuário tem senha cadastrada. Útil para o Angular decidir se exibe o campo "senha atual" na tela de troca de senha (contas de provedor externo não têm senha local).
